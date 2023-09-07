@@ -1,0 +1,45 @@
+#root {
+}
+
+body {
+  background-color: black;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.columnNode div {
+  background-color: purple;
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+}
+
+.columnNode {
+  display: flex;
+}
+
+.columnNode div.alive {
+  background-color: rgb(255, 225, 0);
+}
+
+aside {
+}
+
+button {
+  margin-top: 10px;
+  margin-left: 50px;
+  font-size: 30px;
+}
+
+input,
+p {
+  background-color: white;
+  width: fit-content;
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: 50px;
+  font-size: 30px;
+}
