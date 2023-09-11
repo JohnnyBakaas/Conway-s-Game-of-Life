@@ -1,6 +1,11 @@
 let vTree = [];
 let inter;
 
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const cellSize = 1; // width and height of a cell in pixels
+
 const encode = () => {
   let code = `${vTree.length},${vTree[0].length}`;
 
@@ -56,75 +61,32 @@ const decode = (code) => {
   spwanBoard();
 };
 
-const god = (h, w) => {
-  if (vTree[h][w]) {
-    vTree[h][w] = false;
-    document
-      .getElementById("root")
-      .childNodes[0].childNodes[h].childNodes[w].classList.remove("alive");
+const drawCell = (x, y, alive) => {
+  if (alive) {
+    ctx.fillStyle = "black"; // Alive cells are black
   } else {
-    vTree[h][w] = true;
-    document
-      .getElementById("root")
-      .childNodes[0].childNodes[h].childNodes[w].classList.add("alive");
+    ctx.fillStyle = "white"; // Dead cells are white
   }
+  ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
 };
 
-const changeState = (h, w) => {
-  if (vTree[h][w]) {
-    document
-      .getElementById("root")
-      .childNodes[0].childNodes[h].childNodes[w].classList.add("alive");
-  } else {
-    document
-      .getElementById("root")
-      .childNodes[0].childNodes[h].childNodes[w].classList.remove("alive");
+const god = (h, w) => {
+  vTree[h][w] = !vTree[h][w];
+  drawCell(w, h, vTree[h][w]);
+};
+
+const spwanBoard = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous state
+  for (let i = 0; i < vTree.length; i++) {
+    for (let j = 0; j < vTree[i].length; j++) {
+      drawCell(j, i, vTree[i][j]);
+    }
   }
 };
 
 const spwanNewBoard = (height, width) => {
-  document.getElementById("root").innerHTML = "";
-  vTree = [];
-
-  const tree = document.createElement("main");
-
-  for (let i = 0; i < height; i++) {
-    vTree[i] = [];
-    const columnNode = document.createElement("div");
-    columnNode.classList.add("columnNode");
-    for (let j = 0; j < width; j++) {
-      vTree[i][j] = false;
-      const child = document.createElement("div");
-      child.onclick = () => god(i, j);
-      columnNode.appendChild(child);
-    }
-    tree.appendChild(columnNode);
-  }
-
-  document.getElementById("root").appendChild(tree);
-};
-
-const spwanBoard = () => {
-  if (vTree.length === 0) return spwanNewBoard(55, 95);
-
-  document.getElementById("root").innerHTML = "";
-  const tree = document.createElement("main");
-
-  for (let i = 0; i < vTree.length; i++) {
-    const columnNode = document.createElement("div");
-    columnNode.classList.add("columnNode");
-    for (let j = 0; j < vTree[i].length; j++) {
-      const child = document.createElement("div");
-      if (vTree[i][j]) {
-        child.classList.add("alive");
-      }
-      child.onclick = () => god(i, j);
-      columnNode.appendChild(child);
-    }
-    tree.appendChild(columnNode);
-  }
-
-  document.getElementById("root").appendChild(tree);
+  vTree = new Array(height).fill(0).map(() => new Array(width).fill(false));
+  spwanBoard();
 };
 
 const nextTick = () => {
@@ -150,7 +112,7 @@ const nextTick = () => {
 
   for (let i = 0; i < changes.length; i++) {
     vTree[changes[i][0]][changes[i][1]] = !vTree[changes[i][0]][changes[i][1]];
-    changeState(changes[i][0], changes[i][1]);
+    drawCell(changes[i][1], changes[i][0], vTree[changes[i][0]][changes[i][1]]);
   }
 };
 
@@ -175,4 +137,13 @@ const decodeInput = () => {
   } catch {}
 };
 
-spwanNewBoard(1000, 1000);
+canvas.addEventListener("click", (event) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const i = Math.floor(y / cellSize);
+  const j = Math.floor(x / cellSize);
+  god(i, j);
+});
+
+spwanNewBoard(10000, 10000);

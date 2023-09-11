@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+
+    <aside>
+      <div>
+        <button onclick="spwanNewBoard(55, 95)">Reset</button>
+        <button onclick="nextTick()">NEXT</button>
+        <button onclick="decode('55,95,1947,1,94,2,92,1,2,1,92,2,2991')">
+          EZ EX
+        </button>
+        <button onclick="decode('55,95,0,5225')">Epilepsi</button>
+        <button id="interTheValButton" onclick="interTheVal()">Start</button>
+        <button onclick="getCode()">Get code</button>
+      </div>
+      <p id="seedDisplay"></p>
+      <div>
+        <button onclick="decodeInput()">prøv</button>
+        <input type="text" id="codeInput" />
+      </div>
+    </aside>
+
+    <script src="main.js" async defer></script>
+  </body>
+</html>
